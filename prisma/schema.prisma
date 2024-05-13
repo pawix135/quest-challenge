@@ -65,13 +65,15 @@ model VerificationToken {
 model Challenge {
   id String @id @default(cuid())
   name String
+  description String?
   slug String @unique
   invite_code String @unique
-  user ChallengesOnUser[]
 
+  user ChallengesOnUser[]
   chapters Chapter[]
 
-  expiresAt DateTime
+  dateFrom DateTime
+  dateTo DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
