@@ -41,5 +41,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			session.user.accountType = token.accountType;
 			return session;
 		},
+    
 	},
 });
