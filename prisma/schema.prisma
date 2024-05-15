@@ -16,7 +16,10 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  challenges ChallengesOnUser[]
+  creatorChallenges ChallengesOnCreators[]
+  participantChallenges ChallengesOnParticipants[]
+  solutions SolutionsOnChapterOnUsers[]
+  
   type Role @default(SETUP)
  
   createdAt DateTime @default(now())
@@ -68,17 +71,16 @@ model Challenge {
   description String?
   slug String @unique
   invite_code String @unique
-
-  user ChallengesOnUser[]
+  creator ChallengesOnCreators[]
+  participants ChallengesOnParticipants[]
   chapters Chapter[]
-
   dateFrom DateTime
   dateTo DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model ChallengesOnUser {
+model ChallengesOnCreators{
   id String @default(cuid()) @unique
   challenge Challenge @relation(fields: [challengeId], references: [id])
   challengeId String
@@ -87,14 +89,41 @@ model ChallengesOnUser {
 
 }
 
+model ChallengesOnParticipants {
+  id String @default(cuid()) @unique
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+  challengeId String
+  user User @relation(fields: [userId], references: [id])
+  userId String
+}
+
 model Chapter {
   id String @id @default(cuid())
   name String
   description String
   challenge Challenge @relation(fields: [challengeId], references: [id])
   challengeId String
+
+  solutions SolutionsOnChapterOnUsers[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Solution {
+  id String @id @default(cuid())
+
+  chapter SolutionsOnChapterOnUsers[]
+}
+
+model SolutionsOnChapterOnUsers {
+  id String @default(cuid()) @unique
+  chapter Chapter @relation(fields: [chapterId], references: [id])
+  chapterId String
+  solution Solution @relation(fields: [solutionId], references: [id])
+  solutionId String
+  user User @relation(fields: [userId], references: [id])
+  userId String
 }
 
 enum Role {
