@@ -5,17 +5,16 @@ import { Role } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const session = await auth();
+	const session = await auth();
+	const user = session!.user;
 
-  // Redirect to the setup page to complete the account setup
-  if (session!.user.accountType === "SETUP") redirect("/dashboard/setup");
+	// Redirect to the setup page to complete the account setup
+	if (user.accountType === "SETUP") redirect("/dashboard/setup");
 
-  const user = session!.user;
-
-  return (
-    <main className="container flex p-5">
-      {user.accountType == Role.USER && <UserDashboard />}
-      {user.accountType == Role.CREATOR && <CreatorDashboard />}
-    </main>
-  );
+	return (
+		<main className="container flex p-5">
+			{user.accountType == Role.USER && <UserDashboard />}
+			{user.accountType == Role.CREATOR && <CreatorDashboard />}
+		</main>
+	);
 }
