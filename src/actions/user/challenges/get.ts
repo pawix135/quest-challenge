@@ -16,6 +16,7 @@ export const getChallengesAction = userClient(
 			select: {
 				name: true,
 				slug: true,
+				description: true,
 			},
 		});
 
